@@ -1,10 +1,13 @@
 import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import ControlledOpenSelect from "../Components/ControlledOpenSelect";
+import { useData } from "../Context/AppContext";
 import { getAllDevices } from "../Utils/midiFunctions";
 
 export default function Login({ setDevice }) {
+  const {device} = useData()
+ 
   const [allDevices, setAllDevices] = useState();
 
   const setAllDevicesFunc = async () => {
@@ -15,7 +18,9 @@ export default function Login({ setDevice }) {
   useEffect(() => {
     setAllDevicesFunc();
   }, []);
-
+  if (device) {
+    return <Redirect to='/main'/>
+  }
   return (
     <div>
       <h1>Login</h1>

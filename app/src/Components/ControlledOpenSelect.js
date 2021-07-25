@@ -3,6 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import { useData } from "../Context/AppContext";
+import { Link } from "react-router-dom";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -16,11 +19,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ControlledOpenSelect({ midiDevices }) {
+  const { setDeviceFunc } = useData();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState();
 
   const handleChange = (event) => {
-    localStorage.setItem("device", JSON.stringify(event.target.value));
+    setSelected(event.target.value);
   };
 
   const handleClose = () => {
@@ -56,6 +61,11 @@ export default function ControlledOpenSelect({ midiDevices }) {
             : null}
         </Select>
       </FormControl>
+      {selected && (
+        <Link to="/main">
+          <Button onClick={() => setDeviceFunc(selected)}>Go to Main</Button>
+        </Link>
+      )}
     </div>
   );
 }
