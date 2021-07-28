@@ -1,9 +1,9 @@
 import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { setPreset, setScene } from "../Utils/midiFunctions";
 import Preset from "./Preset";
+import presets from "../UserData/presets";
 
-export default function PresetsMode({ presets }) {
+export default function PresetsMode() {
   return (
     <div>
       <h1>Presets</h1>
