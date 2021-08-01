@@ -6,8 +6,8 @@ import { useData } from "../Context/AppContext";
 import { getAllDevices } from "../Utils/midiFunctions";
 
 export default function Login({ setDevice }) {
-  const {device} = useData()
- 
+  const { device } = useData();
+
   const [allDevices, setAllDevices] = useState();
 
   const setAllDevicesFunc = async () => {
@@ -18,9 +18,11 @@ export default function Login({ setDevice }) {
   useEffect(() => {
     setAllDevicesFunc();
   }, []);
+
   if (device) {
-    return <Redirect to='/main'/>
+    return <Redirect to="/main" />;
   }
+
   return (
     <div>
       <h1>Login</h1>

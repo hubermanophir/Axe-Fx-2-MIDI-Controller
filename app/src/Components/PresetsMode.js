@@ -1,12 +1,14 @@
 import { Button } from "@material-ui/core";
 import { useData } from "../Context/AppContext";
 import { setPreset } from "../Utils/midiFunctions";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Preset from "./Preset";
 import presets from "../UserData/presets.json";
 import FormDialog from "./FormDialog";
 
 export default function PresetsMode() {
+  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+  const keys = presets.map((preset) => preset.key);
   const { device } = useData();
 
   const presetEventListener = async (e) => {
@@ -36,7 +38,11 @@ export default function PresetsMode() {
     <div>
       <h1>Presets</h1>
       {presets && presets.map((preset) => <Preset preset={preset} />)}
-      <FormDialog presetEventListener={presetEventListener} />
+      <FormDialog
+        forceUpdate={forceUpdate}
+        presetEventListener={presetEventListener}
+        keys={keys}
+      />
     </div>
   );
 }

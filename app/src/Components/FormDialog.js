@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -9,15 +9,43 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import IconButton from "@material-ui/core/IconButton";
 
-export default function FormDialog({ presetEventListener }) {
+export default function FormDialog({ presetEventListener, keys, forceUpdate }) {
   const [open, setOpen] = React.useState(false);
+  const [errorVisible, setErrorVisible] = useState(false);
+  const nameRef = useRef();
+  const numberRef = useRef();
+  const keyRef = useRef();
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    setErrorVisible(false);
     setOpen(false);
+  };
+
+  const addHandler = () => {
+    if (nameRef.current.value === "") {
+      setErrorVisible(true);
+      return;
+    } else if (numberRef.current.value === "") {
+      setErrorVisible(true);
+      return;
+    } else if (keyRef.current.value === "") {
+      setErrorVisible(true);
+      return;
+    }
+
+    const preset = {
+      name: nameRef.current.value,
+      presetNumber: Number(numberRef.current.value),
+      key: keyRef.current.value,
+    };
+    console.log(preset);
+    setErrorVisible(false);
+    setOpen(false);
+    forceUpdate();
   };
 
   function DialogFunction() {
@@ -40,39 +68,46 @@ export default function FormDialog({ presetEventListener }) {
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
-            type="email"
+            label="Preset Name"
+            type="text"
             fullWidth
-          />{" "}
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-          />{" "}
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
+            inputRef={nameRef}
+            required
           />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="number"
+            label="Preset Axe Fx Number"
+            type="number"
+            fullWidth
+            inputRef={numberRef}
+            required
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="key"
+            label="Assigned Key to activate"
+            type="text"
+            fullWidth
+            inputRef={keyRef}
+            inputProps={{ maxLength: 1 }}
+            required
+          />
+          {errorVisible && <div>All Fields Must Be Filled</div>}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
+          <Button onClick={addHandler} color="primary">
+            add
           </Button>
         </DialogActions>
       </Dialog>
     );
   }
-
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
