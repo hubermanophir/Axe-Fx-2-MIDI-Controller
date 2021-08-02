@@ -3,13 +3,13 @@ import { useData } from "../Context/AppContext";
 import { setPreset } from "../Utils/midiFunctions";
 import React, { useEffect, useReducer, useState } from "react";
 import Preset from "./Preset";
-import presets from "../UserData/presets.json";
+// import presets from "../UserData/presets.json";
 import FormDialog from "./FormDialog";
 
 export default function PresetsMode() {
   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
-  const keys = presets.map((preset) => preset.key);
-  const { device } = useData();
+  const { device, presets } = useData();
+  const [keys, setKeys] = useState();
 
   const presetEventListener = async (e) => {
     function findWithAttr(array, attr, value) {
@@ -20,10 +20,11 @@ export default function PresetsMode() {
       }
       return -1;
     }
-
-    const preset = findWithAttr(presets, "key", e.key);
-    if (preset !== -1) {
-      await setPreset(preset.presetNumber, 1, device.id);
+    if (presets != null) {
+      const preset = findWithAttr(presets, "key", e.key);
+      if (preset !== -1) {
+        await setPreset(preset.presetNumber, 1, device.id);
+      }
     }
   };
 
@@ -33,6 +34,12 @@ export default function PresetsMode() {
       window.removeEventListener("keyup", presetEventListener, true);
     };
   }, []);
+
+  useEffect(() => {
+    if (presets) {
+      setKeys(presets.map((preset) => preset.key));
+    }
+  }, [presets]);
 
   return (
     <div>

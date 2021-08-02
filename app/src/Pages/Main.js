@@ -9,13 +9,12 @@ export default function Main() {
   const { device } = useData();
 
   const spaceEventListener = (e) => {
-    if (e.keyCode === 32) {
+    if (e.keyCode === 13) {
       setPresetVisible((prev) => setPresetVisible(!prev));
     }
   };
 
   useEffect(() => {
-    // setPresets(JSON.parse(localStorage.getItem("presets")));
     window.addEventListener("keyup", spaceEventListener);
     return () => {
       window.removeEventListener("keyup", spaceEventListener);
@@ -26,5 +25,13 @@ export default function Main() {
     return <Redirect to="/" />;
   }
 
-  return <div>{presetVisible ? <PresetsMode /> : <SceneMode />}</div>;
+  return (
+    <div>
+      {presetVisible ? (
+        <PresetsMode/>
+      ) : (
+        <SceneMode />
+      )}
+    </div>
+  );
 }

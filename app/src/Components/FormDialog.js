@@ -8,10 +8,13 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import IconButton from "@material-ui/core/IconButton";
+import { useData } from "../Context/AppContext";
 
 export default function FormDialog({ presetEventListener, keys, forceUpdate }) {
   const [open, setOpen] = React.useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
+  const { addPreset } = useData();
+
   const nameRef = useRef();
   const numberRef = useRef();
   const keyRef = useRef();
@@ -42,7 +45,7 @@ export default function FormDialog({ presetEventListener, keys, forceUpdate }) {
       presetNumber: Number(numberRef.current.value),
       key: keyRef.current.value,
     };
-    console.log(preset);
+    addPreset(preset);
     setErrorVisible(false);
     setOpen(false);
     forceUpdate();
